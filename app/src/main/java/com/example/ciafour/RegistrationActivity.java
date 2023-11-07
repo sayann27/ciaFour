@@ -15,9 +15,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegistrationActivity extends AppCompatActivity {
-    private EditText etUsername, etPassword, etPhoneNumber;
+    private EditText etUsername, etPassword, etPhoneNumber, email;
     private Button btnRegister;
-
+    private DbHelper dbHelper;
     private SQLiteDatabase db;
 
     @Override
@@ -29,12 +29,15 @@ public class RegistrationActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
         btnRegister = findViewById(R.id.btnRegister);
+        email = findViewById(R.id.etEmailId);
 
+        dbHelper = new DbHelper(this);
+        db = dbHelper.getWritableDatabase();
         // Create or open the SQLite database
-        db = openOrCreateDatabase("UserDataDB", Context.MODE_PRIVATE, null);
+//        db = openOrCreateDatabase("GroceryDB", Context.MODE_PRIVATE, null);
 
         // Create the user data table if it doesn't exist
-        db.execSQL("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, phone_number TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, phone TEXT, email TEXT)");
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +45,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
                 String phoneNumber = etPhoneNumber.getText().toString();
+                String emailId = email.getText().toString();
 
                 if (username.isEmpty() || password.isEmpty() || phoneNumber.isEmpty()) {
                     Toast.makeText(RegistrationActivity.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
@@ -51,6 +55,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     values.put("username", username);
                     values.put("password", password);
                     values.put("phone_number", phoneNumber);
+                    values.put("email", emailId);
                     db.insert("users", null, values);
 
                     Toast.makeText(RegistrationActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
