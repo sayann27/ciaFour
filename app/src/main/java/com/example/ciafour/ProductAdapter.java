@@ -34,6 +34,7 @@ public class ProductAdapter {
             productView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    
                     Intent intent = new Intent(context, ProductDescriptionActivity.class);
                     intent.putExtra("product_name", product.getName());
                     context.startActivity(intent);

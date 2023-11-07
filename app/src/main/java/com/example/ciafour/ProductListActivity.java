@@ -16,7 +16,7 @@ public class ProductListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_list);
 
         dbHelper = new DbHelper(this);
-        dbHelper.insertValues("Apple", 45);
+//        dbHelper.insertValues("Apple", 45);
         List<Product> productList = dbHelper.getAllProducts();
 
 

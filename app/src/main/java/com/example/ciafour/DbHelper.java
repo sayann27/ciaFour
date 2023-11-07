@@ -34,6 +34,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_NAME + " TEXT, " +
                 COLUMN_PRICE + " REAL);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + "orders" + " (" +
+                "name" + " TEXT, " +
+                "price" + " REAL);");
+
     }
 
     @Override
@@ -70,6 +74,24 @@ public class DbHelper extends SQLiteOpenHelper {
         try {
             // Insert the expense data into the database
             long newRowId = db.insert(TABLE_PRODUCTS, null, values);
+            return newRowId;
+        } catch (SQLException e) {
+            // Handle any database insertion errors here
+            e.printStackTrace();
+            return -1; // Return -1 to indicate an error
+        } finally {
+            db.close(); // Close the database connection
+        }
+    }
+    public long insertOrders(String name, double price) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_PRICE, price);
+
+        try {
+            // Insert the expense data into the database
+            long newRowId = db.insert("orders", null, values);
             return newRowId;
         } catch (SQLException e) {
             // Handle any database insertion errors here

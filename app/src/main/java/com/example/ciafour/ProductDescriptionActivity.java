@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ProductDescriptionActivity extends AppCompatActivity {
     private DbHelper dbHelper;
-
+    public String[] orderNames = {};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,9 +53,8 @@ public class ProductDescriptionActivity extends AppCompatActivity {
             addToCartButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Implement your logic for adding the product to the cart
-                    // You can use SharedPreferences or a database to store cart items.
-                    // You can also update a cart icon in the main activity.
+                    dbHelper.insertOrders(product.getName(), product.getPrice());
+                    finish();
                 }
             });
         }
@@ -71,15 +70,9 @@ public class ProductDescriptionActivity extends AppCompatActivity {
         String selection = DbHelper.COLUMN_NAME + " = ?";
         String[] selectionArgs = { productName };
 
-        Cursor cursor = db.query(
-                DbHelper.TABLE_PRODUCTS,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = db.rawQuery("SELECT * FROM products WHERE name = ?", new String[]{productName}, null);
+
+
 
         Product product = null;
 
