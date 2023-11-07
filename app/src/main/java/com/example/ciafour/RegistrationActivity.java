@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RegistrationActivity extends AppCompatActivity {
     private EditText etUsername, etPassword, etPhoneNumber, email;
     private Button btnRegister;
-
+    public static String emailId;
     private SQLiteDatabase db;
 
     @Override
@@ -43,7 +43,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
                 String phoneNumber = etPhoneNumber.getText().toString();
-                String emailId = email.getText().toString();
+                emailId = email.getText().toString();
 
                 if (username.isEmpty() || password.isEmpty() || phoneNumber.isEmpty()) {
                     Toast.makeText(RegistrationActivity.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();

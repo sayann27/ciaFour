@@ -14,10 +14,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText etUsername, etPassword;
+    private EditText etUsername;
+    public EditText etPassword;
     private CheckBox checkboxRememberMe;
     private Button btnLogin, btnRegister;
-
+    public static String username;
     private SQLiteDatabase db;
 
     @Override
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = etUsername.getText().toString();
+                username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
 
                 // Check if the user exists in the database

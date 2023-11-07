@@ -1,15 +1,26 @@
 package com.example.ciafour;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.Properties;
 
 public class ViewOrdersActivity extends Activity {
     private ListView orderListView;
@@ -34,12 +45,78 @@ public class ViewOrdersActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(ViewOrdersActivity.this, OrderSummaryActivity.class);
                 String passer = OrderSummary();
+                sendEmail(passer);
                 intent.putExtra("passer", passer);
                 startActivity(intent);
 
-                Toast.makeText(ViewOrdersActivity.this, "Order confirmed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewOrdersActivity.this, "Order placed and Email sent!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void sendEmail(String passer) {
+        final String to = RegistrationActivity.emailId;
+        Toast.makeText(ViewOrdersActivity.this, to, Toast.LENGTH_SHORT).show();
+
+        final String subject = "Order placed";
+        final String message = "Your order summary is:\n"+ passer;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Replace these with your email credentials and server settings
+                    final String username = "sayanmandal274@gmail.com";
+                    final String password = "llhuxdvdxmdsyqsi"; // Use the app password
+                    String host = "smtp.gmail.com";
+                    int port = 587;
+
+                    Properties props = new Properties();
+                    props.put("mail.smtp.auth", "true");
+                    props.put("mail.smtp.starttls.enable", "true");
+                    props.put("mail.smtp.host", host);
+                    props.put("mail.smtp.port", port);
+
+                    Session session = Session.getInstance(props,
+                            new javax.mail.Authenticator() {
+                                protected PasswordAuthentication getPasswordAuthentication() {
+                                    return new PasswordAuthentication(username, password);
+                                }
+                            });
+
+                    Message emailMessage = new MimeMessage(session);
+                    emailMessage.setFrom(new InternetAddress(username));
+                    emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));// Add BCC recipients
+                    emailMessage.setSubject(subject);
+                    emailMessage.setText(message);
+
+                    Transport.send(emailMessage);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Email sent", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Error sending email. Please check your credentials and try again.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "An unexpected error occurred. Please try again later.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
     }
     private String OrderSummary(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -48,7 +125,9 @@ public class ViewOrdersActivity extends Activity {
         Cursor cursor = db.rawQuery(query, null);
         String passer = "";
         if (cursor != null) {
+
             if (cursor.moveToFirst()) {
+
                 String[] orders = new String[cursor.getCount()];
                 int i = 0;
                 double amount = 0;
@@ -65,9 +144,9 @@ public class ViewOrdersActivity extends Activity {
                 } while (cursor.moveToNext());
 
                 for(int j = 0;j<i;j++){
-                    passer.concat("\n" +orders[j] + "\n");
+                    passer = passer.concat("\n" +orders[j] + "\n");
                     if (j == i-1){
-                        passer.concat("\n" + "Total: " + amount);
+                        passer = passer.concat("\n" + "Total: " + amount);
                     }
                 }
 
