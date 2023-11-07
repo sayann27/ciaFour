@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RegistrationActivity extends AppCompatActivity {
     private EditText etUsername, etPassword, etPhoneNumber, email;
     private Button btnRegister;
-    private DbHelper dbHelper;
+
     private SQLiteDatabase db;
 
     @Override
@@ -31,13 +31,11 @@ public class RegistrationActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         email = findViewById(R.id.etEmailId);
 
-        dbHelper = new DbHelper(this);
-        db = dbHelper.getWritableDatabase();
         // Create or open the SQLite database
-//        db = openOrCreateDatabase("GroceryDB", Context.MODE_PRIVATE, null);
+        db = openOrCreateDatabase("UserDataDB", Context.MODE_PRIVATE, null);
 
         // Create the user data table if it doesn't exist
-        db.execSQL("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, phone TEXT, email TEXT)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT, phone_number TEXT, email TEXT)");
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
