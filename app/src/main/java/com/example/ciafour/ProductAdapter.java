@@ -1,6 +1,7 @@
 package com.example.ciafour;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,15 @@ public class ProductAdapter {
 
 
             linearLayout.addView(productView);
+            productView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, ProductDescriptionActivity.class);
+                    intent.putExtra("product_name", product.getName());
+                    context.startActivity(intent);
+                }
+            });
+
         }
     }
 }
