@@ -6,8 +6,16 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     tools:context=".ProductListActivity">
-
+    <Button
+        android:id="@+id/view_orders_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View My Orders"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
     <ScrollView
+        android:layout_below="@id/view_orders_button"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -19,4 +27,5 @@
             <!-- Add product items dynamically here -->
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

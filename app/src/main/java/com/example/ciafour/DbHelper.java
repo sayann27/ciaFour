@@ -85,6 +85,9 @@ public class DbHelper extends SQLiteOpenHelper {
     }
     public long insertOrders(String name, double price) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + "orders" + " (" +
+                "name" + " TEXT, " +
+                "price" + " REAL);");
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, name);
         values.put(COLUMN_PRICE, price);
