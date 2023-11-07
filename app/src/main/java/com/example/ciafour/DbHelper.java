@@ -7,16 +7,20 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DbHelper extends SQLiteOpenHelper {
-    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_NAME = "name";
     private static final String DATABASE_NAME = "GroceryDB";
     private static final int DATABASE_VERSION = 1;
 
     // Define the table schema and column names
-    private static final String TABLE_EXPENSES = "expenses";
+
     private static final String COLUMN_ID = "_id";
 
-    public static final String COLUMN_AMOUNT = "amount";
+    public static final String COLUMN_PRICE = "price";
+    private static final String TABLE_PRODUCTS = "products";
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,10 +29,10 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create the expenses table
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_EXPENSES + " (" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCTS + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_DESCRIPTION + " TEXT, " +
-                COLUMN_AMOUNT + " REAL);");
+                COLUMN_NAME + " TEXT, " +
+                COLUMN_PRICE + " REAL);");
     }
 
     @Override
@@ -37,10 +41,24 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // Method to fetch all expenses from the database
-    public Cursor getAllExpenses() {
+    public List<Product> getAllProducts() {
+        List<Product> productList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(TABLE_EXPENSES, null, null, null, null, null, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                double price = cursor.getDouble(2);
+                productList.add(new Product(id, name, price));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return productList;
     }
+
 
     public long insertExpense(String description, double amount) {
         SQLiteDatabase db = this.getWritableDatabase();
