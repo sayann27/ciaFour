@@ -3,18 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <ListView
-        android:id="@+id/orderListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <Button
         android:id="@+id/confirmOrderButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/orderListView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text="Confirm Order" />
+    <ListView
+        android:id="@+id/orderListView"
+        android:layout_width="match_parent"
+        android:layout_below="@id/confirmOrderButton"
+        android:layout_height="match_parent" />
+
+
 </RelativeLayout>
