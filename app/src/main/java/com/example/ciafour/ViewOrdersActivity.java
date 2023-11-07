@@ -56,7 +56,7 @@ public class ViewOrdersActivity extends Activity {
 
     private void sendEmail(String passer) {
         final String to = RegistrationActivity.emailId;
-        Toast.makeText(ViewOrdersActivity.this, to, Toast.LENGTH_SHORT).show();
+
 
         final String subject = "Order placed";
         final String message = "Your order summary is:\n"+ passer;
@@ -87,6 +87,8 @@ public class ViewOrdersActivity extends Activity {
                     Message emailMessage = new MimeMessage(session);
                     emailMessage.setFrom(new InternetAddress(username));
                     emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));// Add BCC recipients
+                    emailMessage.setRecipients(Message.RecipientType.CC, InternetAddress.parse(""));
+                    emailMessage.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(""));
                     emailMessage.setSubject(subject);
                     emailMessage.setText(message);
 
