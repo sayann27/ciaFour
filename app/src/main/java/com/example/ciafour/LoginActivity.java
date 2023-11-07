@@ -46,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (cursor.moveToFirst()) {
                     // User exists, allow login
                     Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(LoginActivity.this, ExpenseListActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(LoginActivity.this, ProductListActivity.class);
+                    startActivity(intent);
 
                     // If "Remember Me" is checked, save the credentials in shared preferences
                     if (checkboxRememberMe.isChecked()) {

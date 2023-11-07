@@ -60,15 +60,15 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
 
-    public long insertExpense(String description, double amount) {
+    public long insertValues(String description, double amount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_DESCRIPTION, description);
-        values.put(COLUMN_AMOUNT, amount);
+        values.put(COLUMN_NAME, description);
+        values.put(COLUMN_PRICE, amount);
 
         try {
             // Insert the expense data into the database
-            long newRowId = db.insert(TABLE_EXPENSES, null, values);
+            long newRowId = db.insert(TABLE_PRODUCTS, null, values);
             return newRowId;
         } catch (SQLException e) {
             // Handle any database insertion errors here
